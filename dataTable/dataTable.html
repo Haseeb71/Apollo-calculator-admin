@@ -72,7 +72,14 @@
     <script>
       $(document).ready(function () {
         // Use the fetch API to get data from the route
-        fetch("http://localhost:3000/getEmail")
+        fetch("https://us-central1-apollo-new-be333.cloudfunctions.net/api/getEmail",{
+          method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // If you need to send any data in the request body, add it here
+            body: JSON.stringify({})
+        })
           .then(function (response) {
             // Check if the response is successful
             if (response.ok) {
