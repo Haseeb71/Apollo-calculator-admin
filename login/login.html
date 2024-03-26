@@ -44,8 +44,8 @@
         <span>Don't have an account?</span>
         <button>
           <a href="#">signup</a>
-        </button> -->
-      </div>
+        </button>
+      </div> -->
     </div>
     <script>
       $(document).ready(function () {
@@ -69,6 +69,8 @@
           })
             .done(function (response) {
               console.log('Success:', response);
+              // Successful login
+              localStorage.setItem('isLoggedIn', 'true');
               // Redirect to dataTable.html on successful login
           window.location.href = '../dataTable/dataTable.html';
             })
