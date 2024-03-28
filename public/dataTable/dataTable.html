@@ -14,17 +14,24 @@
     <link rel="stylesheet" href="../scss/main.css" />
     <title>Data Table</title>
   </head>
-  <body>
+  <body> 
     <script>
       // Check if the user is logged in
       const isLoggedIn = localStorage.getItem('isLoggedIn');
-  console.log(isLoggedIn);
+   console.log(isLoggedIn);
       if (!isLoggedIn) {
         // If not logged in, redirect to the login page
         window.location.href = '../login/login.html';
       }
     </script>
     <div class="user-data-table">
+      <div class="modal" id="myModal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div> 
       <div class="logo">
         <a href="#">
           <img src="../logo/logo_200x.webp" alt="" />
@@ -53,7 +60,7 @@
               <th>cost</th>
               <th>dailyInput</th>
               <th>email</th>
-              <th>expansionBattery</th>
+              <!-- <th>expansionBattery</th>
               <th>howLongOutage</th>
               <th>howMuchOffGrid</th>
               <th>howMuchYourAppliance</th>
@@ -68,7 +75,7 @@
               <th>stayOn</th>
               <th>subTotal</th>
               <th>tax</th>
-              <th>totalInput</th>
+              <th>totalInput</th> -->
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -76,6 +83,7 @@
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../js/script.js"></script>
     <script>
       // Logout button click event
       $('.login-btn').click(function () {
@@ -133,20 +141,67 @@
             console.error("Error fetching data from the route:", error);
           });
 
-        function populateTable(emails) {
-          var tableBody = $("#tableBody");
+          function populateTable(emails) {
+    var tableBody = $("#tableBody");
 
-          // Dynamically create body rows
-          emails.forEach(function (rowData, index) {
-            // Use the variables to create the body row
-            var bodyRow = `<tr>
+    // Dynamically create body rows
+    emails.forEach(function (rowData, index) {
+        // Use the variables to create the body row
+        var bodyRow = `<tr>
             <td>${index + 1}</td>
             <td>${rowData.apollo5k}</td>
             <td>${rowData.batteryNeeds}</td>
             <td>${rowData.cost}</td>
             <td>${rowData.dailyInput}</td>
             <td>${rowData.email}</td>
-            <td>${rowData.expansionBattery}</td>
+            <td><button class='view-modal-btn'>View</button></td>
+        </tr>`;
+        tableBody.append(bodyRow);
+    });
+
+    // Add event listener to view buttons
+    $(".view-modal-btn").click(function () {
+        var rowData = emails[$(this).closest("tr").index()];
+        openModal(rowData);
+    });
+}
+
+
+function openModal(rowData) {
+    var modal = $("#myModal");
+    var modalContent = $("#modalContent");
+
+    // Clear previous content
+    modalContent.empty();
+
+    // Append each key-value pair to modal content
+    for (var key in rowData) {
+        if (rowData.hasOwnProperty(key)) {
+            modalContent.append(`<p><strong>${key}:</strong> ${rowData[key]}</p>`);
+        }
+    }
+
+    // Show modal
+    modal.show();
+
+    // Close modal when close button (x) is clicked
+    $(".close").click(function () {
+        modal.hide();
+    });
+
+    // Close modal when clicking outside modal content
+    $(window).click(function (event) {
+        if (event.target == modal[0]) {
+            modal.hide();
+        }
+    });
+}
+
+      });
+    </script>
+  </body>
+</html>
+<!-- <td>${rowData.expansionBattery}</td>
             <td>${rowData.howLongOutage}</td>
             <td>${rowData.howMuchOffGrid}</td>
             <td>${rowData.howMuchYourAppliance}</td>
@@ -161,12 +216,4 @@
             <td>${rowData.stayOn}</td>
             <td>${rowData.subTotal}</td>
             <td>${rowData.tax}</td>
-            <td>${rowData.totalInput}</td>
-          </tr>`;
-            tableBody.append(bodyRow);
-          });
-        }
-      });
-    </script>
-  </body>
-</html>
+            <td>${rowData.totalInput}</td> -->
