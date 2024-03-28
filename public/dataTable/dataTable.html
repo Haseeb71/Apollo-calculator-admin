@@ -12,26 +12,26 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="../scss/main.css" />
-    <title>Data Table</title>
+    <title>Apollo Dashboard</title>
   </head>
-  <body> 
+  <body>
     <script>
       // Check if the user is logged in
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
-   console.log(isLoggedIn);
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      console.log(isLoggedIn);
       if (!isLoggedIn) {
         // If not logged in, redirect to the login page
-        window.location.href = '../login/login.html';
+        window.location.href = "../login/login.html";
       }
     </script>
     <div class="user-data-table">
       <div class="modal" id="myModal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalContent"></div>
+          <span class="close">&times;</span>
+          <div id="modalContent"></div>
         </div>
-    </div> 
+      </div>
       <div class="logo">
         <a href="#">
           <img src="../logo/logo_200x.webp" alt="" />
@@ -40,7 +40,6 @@
       <div class="table-title">
         <h4 class="data_table_title">Email Details</h4>
         <a href="../login/login.html">
-
           <button class="login-btn">logout</button>
         </a>
       </div>
@@ -83,31 +82,32 @@
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="../js/script.js"></script>
+    <!-- <script src="../js/script.js"></script> -->
     <script>
-      // Logout button click event
-      $('.login-btn').click(function () {
-        // Use AJAX to clear localStorage on the server (optional)
-  
-        // Clear localStorage on the client side
+      $(".login-btn").click(function () {
         localStorage.clear();
-  
-        // Redirect to the login page
-        window.location.href = '../login/login.html';
+        window.location.href = "../login/login.html";
       });
     </script>
+
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
       $(document).ready(function () {
+        // Variable to track whether DataTable is initialized
+        var tableInitialized = false;
+
         // Use the fetch API to get data from the route
-        fetch("https://us-central1-apollo-new-be333.cloudfunctions.net/api/getEmail",{
-          method: "POST",
+        fetch(
+          "https://us-central1-apollo-new-be333.cloudfunctions.net/api/getEmail",
+          {
+            method: "POST",
             headers: {
-                "Content-Type": "application/json"
+              "Content-Type": "application/json",
             },
             // If you need to send any data in the request body, add it here
-            body: JSON.stringify({})
-        })
+            body: JSON.stringify({}),
+          }
+        )
           .then(function (response) {
             // Check if the response is successful
             if (response.ok) {
@@ -124,14 +124,17 @@
             if (data.emails && Array.isArray(data.emails)) {
               // If there's an 'emails' property and it's an array
               populateTable(data.emails);
-              // Initialize DataTable after populating the table
-              $("#example").DataTable({
-                order: [],
-                paging: true,
-                searching: true,
-                ordering: true,
-                pagination: true,
-              });
+              // Initialize DataTable only if it's not already initialized
+              if (!tableInitialized) {
+                $("#example").DataTable({
+                  order: [],
+                  paging: true,
+                  searching: true,
+                  ordering: true,
+                  pagination: true,
+                });
+                tableInitialized = true;
+              }
             } else {
               console.error("Invalid data structure:", data);
             }
@@ -141,79 +144,63 @@
             console.error("Error fetching data from the route:", error);
           });
 
-          function populateTable(emails) {
-    var tableBody = $("#tableBody");
+        function populateTable(emails) {
+          var tableBody = $("#tableBody");
 
-    // Dynamically create body rows
-    emails.forEach(function (rowData, index) {
-        // Use the variables to create the body row
-        var bodyRow = `<tr>
-            <td>${index + 1}</td>
-            <td>${rowData.apollo5k}</td>
-            <td>${rowData.batteryNeeds}</td>
-            <td>${rowData.cost}</td>
-            <td>${rowData.dailyInput}</td>
-            <td>${rowData.email}</td>
-            <td><button class='view-modal-btn'>View</button></td>
-        </tr>`;
-        tableBody.append(bodyRow);
-    });
+          // Dynamically create body rows
+          emails.forEach(function (rowData, index) {
+            // Use the variables to create the body row
+            var bodyRow = `<tr>
+          <td>${index + 1}</td>
+          <td>${rowData.apollo5k}</td>
+          <td>${rowData.batteryNeeds}</td>
+          <td>${rowData.cost}</td>
+          <td>${rowData.dailyInput}</td>
+          <td>${rowData.email}</td>
+          <td><button class='view-modal-btn'>View</button></td>
+      </tr>`;
+            tableBody.append(bodyRow);
+          });
 
-    // Add event listener to view buttons
-    $(".view-modal-btn").click(function () {
-        var rowData = emails[$(this).closest("tr").index()];
-        openModal(rowData);
-    });
-}
-
-
-function openModal(rowData) {
-    var modal = $("#myModal");
-    var modalContent = $("#modalContent");
-
-    // Clear previous content
-    modalContent.empty();
-
-    // Append each key-value pair to modal content
-    for (var key in rowData) {
-        if (rowData.hasOwnProperty(key)) {
-            modalContent.append(`<p><strong>${key}:</strong> ${rowData[key]}</p>`);
+          // Add event listener to view buttons
+          $(".view-modal-btn").click(function () {
+            var rowData = emails[$(this).closest("tr").index()];
+            openModal(rowData);
+          });
         }
-    }
 
-    // Show modal
-    modal.show();
+        function openModal(rowData) {
+          var modal = $("#myModal");
+          var modalContent = $("#modalContent");
 
-    // Close modal when close button (x) is clicked
-    $(".close").click(function () {
-        modal.hide();
-    });
+          // Clear previous content
+          modalContent.empty();
 
-    // Close modal when clicking outside modal content
-    $(window).click(function (event) {
-        if (event.target == modal[0]) {
+          // Append each key-value pair to modal content
+          for (var key in rowData) {
+            if (rowData.hasOwnProperty(key)) {
+              modalContent.append(
+                `<p><strong>${key}:</strong> ${rowData[key]}</p>`
+              );
+            }
+          }
+
+          // Show modal
+          modal.show();
+
+          // Close modal when close button (x) is clicked
+          $(".close").click(function () {
             modal.hide();
-        }
-    });
-}
+          });
 
+          // Close modal when clicking outside modal content
+          $(window).click(function (event) {
+            if (event.target == modal[0]) {
+              modal.hide();
+            }
+          });
+        }
       });
     </script>
   </body>
 </html>
-<!-- <td>${rowData.expansionBattery}</td>
-            <td>${rowData.howLongOutage}</td>
-            <td>${rowData.howMuchOffGrid}</td>
-            <td>${rowData.howMuchYourAppliance}</td>
-            <td>${rowData.howMuchYourHome}</td>
-            <td>${rowData.maximumInput}</td>
-            <td>${rowData.mode}</td>
-            <td>${rowData.name}</td>
-            <td>${rowData.power240v}</td>
-            <td>${rowData.solarNeeds}</td>
-            <td>${rowData.solarPanels}</td>
-            <td>${rowData.solarSupply}</td>
-            <td>${rowData.stayOn}</td>
-            <td>${rowData.subTotal}</td>
-            <td>${rowData.tax}</td>
-            <td>${rowData.totalInput}</td> -->
