@@ -135,52 +135,24 @@ body {
   color: #feb718;
 }
 
-.table-title{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-font-size: 16px !important;
-}
-
-.table-title .login-btn{
-  border: 1px solid #feb718;
-  padding: 7px 12px;
-  font-size: 14px;
-  text-transform: capitalize;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.table-title .login-btn:hover{
-  background-color: #feb718 !important;
-  color: #000;
-}
-
 .user-data-table {
   max-width: 1100px;
   width: 100%;
   margin: 2rem auto;
 }
 .user-data-table .data_table_title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
-
+  padding-bottom: 1rem;
 }
 .user-data-table .table-container {
   box-shadow: 0 0 3px gray;
   padding: 2rem;
   border-radius: 8px;
-  overflow-x: scroll;
 }
 .user-data-table .table-container table thead tr,
 .user-data-table .table-container table thead th {
-  padding:0 3rem 1rem 0 !important;
-  text-transform: capitalize !important;
-  padding: 0 3rem;
- 
+  padding-bottom: 1rem !important;
 }
 .user-data-table .table-container table thead tr {
   background-color: transparent !important;
@@ -189,16 +161,17 @@ font-size: 16px !important;
   font-size: 13px;
   color: gray;
   padding-top: 2rem !important;
-  text-align: center !important;
+  text-align: start;
   padding-left: 0 !important;
-  font-weight: 600 !important;
+  padding: 0 1rem !important;
+  text-transform: capitalize !important;
 }
 .user-data-table .table-container table tbody tr:nth-child(odd) {
-  background-color: rgba(201, 195, 195, 0.341) !important;
+  background-color: rgba(201, 195, 195, 0.0941176471) !important;
 }
 .user-data-table .table-container table tbody tr,
 .user-data-table .table-container table tbody td {
-  padding: 0.8rem  !important;
+  padding: 0.8rem 0 !important;
 }
 .user-data-table .table-container table tbody tr td b {
   font-weight: 600;
@@ -208,7 +181,6 @@ font-size: 16px !important;
 .user-data-table .table-container table tbody tr td {
   font-size: 13px;
   color: #807c7c;
-  text-align: start !important;
 }
 .user-data-table .table-container table tbody tr .actiontd {
   display: flex;
